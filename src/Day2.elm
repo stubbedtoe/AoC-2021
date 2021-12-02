@@ -35,42 +35,42 @@ positionToPart2 { depth, horizontal } =
 
 calculatePosition : Position -> List Command -> Position
 calculatePosition current commands =
-    case current of
-        { depth, horizontal } ->
-            case commands of
-                next :: rest ->
-                    case next of
-                        Forward n ->
-                            calculatePosition { current | horizontal = horizontal + n } rest
+    case commands of
+        next :: rest ->
+            case next of
+                Forward n ->
+                    calculatePosition { current | horizontal = current.horizontal + n } rest
 
-                        Down n ->
-                            calculatePosition { current | depth = depth + n } rest
+                Down n ->
+                    calculatePosition { current | depth = current.depth + n } rest
 
-                        Up n ->
-                            calculatePosition { current | depth = depth - n } rest
+                Up n ->
+                    calculatePosition { current | depth = current.depth - n } rest
 
-                [] ->
-                    current
+        [] ->
+            current
 
 
 calculatePositionWithAim : PositionWithAim -> List Command -> PositionWithAim
 calculatePositionWithAim current commands =
-    case current of
-        { depth, horizontal, aim } ->
-            case commands of
-                next :: rest ->
-                    case next of
-                        Forward n ->
-                            calculatePositionWithAim { current | horizontal = horizontal + n, depth = depth + (aim * n) } rest
+    case commands of
+        next :: rest ->
+            case next of
+                Forward n ->
+                    let
+                        newDepth =
+                            current.depth + (current.aim * n)
+                    in
+                    calculatePositionWithAim { current | horizontal = current.horizontal + n, depth = newDepth } rest
 
-                        Down n ->
-                            calculatePositionWithAim { current | aim = aim + n } rest
+                Down n ->
+                    calculatePositionWithAim { current | aim = current.aim + n } rest
 
-                        Up n ->
-                            calculatePositionWithAim { current | aim = aim - n } rest
+                Up n ->
+                    calculatePositionWithAim { current | aim = current.aim - n } rest
 
-                [] ->
-                    current
+        [] ->
+            current
 
 
 parseLine : String -> Maybe Command
