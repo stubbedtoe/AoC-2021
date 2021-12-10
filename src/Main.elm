@@ -3,6 +3,7 @@ module Main exposing (..)
 import Browser
 import Day1
 import Day2
+import Day3
 import Html exposing (Html, button, div, p, text)
 import Html.Events exposing (onClick)
 import Types exposing (Solution)
@@ -33,6 +34,7 @@ daysCompleted : List Day
 daysCompleted =
     [ Day 1
     , Day 2
+    , Day 3
     ]
 
 
@@ -59,6 +61,9 @@ update msg _ =
 
                 2 ->
                     Just Day2.solution
+
+                3 ->
+                    Just Day3.solution
 
                 _ ->
                     Nothing
