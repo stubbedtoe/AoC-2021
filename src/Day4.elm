@@ -1,6 +1,6 @@
 module Day4 exposing (parseInput, solution)
 
-import Array exposing (Array)
+import Array
 import Day4input
 import Types exposing (Solution)
 import Utils
@@ -19,12 +19,15 @@ type alias BingoCard =
     }
 
 
-type alias Bingo =
-    { card : Maybe BingoCard
+type alias WinningCard =
+    { card : BingoCard
     , num : Int
-    , previousNums : List Int
+    }
+
+
+type alias Bingo =
+    { cards : List WinningCard
     , otherCards : List BingoCard
-    , currentNums : List Int
     }
 
 
@@ -56,7 +59,7 @@ getColumnFromIndex { squares, height } start =
 getRows : BingoCard -> List (List BingoSquare)
 getRows card =
     List.range 0 (card.height - 1)
-        |> List.map (\i -> getRowFromIndex card i)
+        |> List.map (\i -> getRowFromIndex card (i * card.width))
 
 
 getColumns : BingoCard -> List (List BingoSquare)
@@ -105,11 +108,8 @@ checkCardsAfterNumber num current =
     List.foldl
         (\card bingo ->
             if isCardFull card then
-                { bingo
-                    | card = Just card
-                    , num = num
-                    , previousNums = bingo.currentNums
-                    , otherCards = List.filter (\c -> not (isCardFull c)) bingo.otherCards
+                { cards = bingo.cards ++ [ { card = card, num = num } ]
+                , otherCards = List.filter (\c -> c /= card) bingo.otherCards
                 }
 
             else
@@ -125,44 +125,22 @@ markNumberOnAllCards num current =
         newCards =
             List.map (markNumberOnCard num) current.otherCards
     in
-    checkCardsAfterNumber num { current | otherCards = newCards, currentNums = current.currentNums ++ [ num ] }
+    checkCardsAfterNumber num { current | otherCards = newCards }
 
 
-playBingoPart1 : List Int -> List BingoCard -> Bingo
-playBingoPart1 nums cards =
-    List.foldl
-        (\num bingo ->
-            case bingo.card of
-                Just card ->
-                    bingo
-
-                Nothing ->
-                    markNumberOnAllCards num bingo
-        )
-        { card = Nothing, num = 0, otherCards = cards, currentNums = [], previousNums = [] }
-        nums
-
-
-playBingoPart2 : List Int -> List BingoCard -> Bingo
-playBingoPart2 nums cards =
-    let
-        allNumsCalled =
-            List.foldl
-                markNumberOnAllCards
-                { card = Nothing, num = 0, otherCards = cards, currentNums = [], previousNums = [] }
-                nums
-    in
+playBingo : ParsedInput -> Bingo
+playBingo { numbers, cards } =
     List.foldl
         markNumberOnAllCards
-        { card = Nothing, num = 0, otherCards = cards, currentNums = [], previousNums = [] }
-        allNumsCalled.previousNums
+        { cards = [], otherCards = cards }
+        numbers
 
 
-bingoToString : Bingo -> String
-bingoToString { card, num } =
-    case card of
-        Just bingoCard ->
-            List.filter (\{ checked } -> checked == False) bingoCard.squares
+bingoToString : Maybe WinningCard -> String
+bingoToString maybeWinningCard =
+    case maybeWinningCard of
+        Just { card, num } ->
+            List.filter (\{ checked } -> checked == False) card.squares
                 |> List.map .value
                 |> List.sum
                 |> (*) num
@@ -211,26 +189,20 @@ parseInput input =
             { numbers = [], cards = [] }
 
 
-part1 : String
-part1 =
-    parseInput Day4input.input
-        |> (\{ numbers, cards } ->
-                playBingoPart1 numbers cards
-                    |> bingoToString
-           )
-
-
-part2 : String
-part2 =
-    parseInput Day4input.input
-        |> (\{ numbers, cards } ->
-                playBingoPart2 numbers cards
-                    |> bingoToString
-           )
-
-
 solution : Solution
 solution =
-    { part1 = Just part1
-    , part2 = Just part2
+    let
+        bingo =
+            parseInput Day4input.input
+                |> playBingo
+
+        part1Card =
+            List.head bingo.cards
+
+        part2Card =
+            List.reverse bingo.cards
+                |> List.head
+    in
+    { part1 = Just (bingoToString part1Card)
+    , part2 = Just (bingoToString part2Card)
     }
