@@ -1,6 +1,9 @@
 module Day2input exposing (input)
 
-input = """
+
+input : String
+input =
+    """
 forward 1
 forward 5
 forward 8

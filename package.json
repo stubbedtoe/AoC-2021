@@ -1,7 +1,8 @@
 {
   "scripts": {
     "postinstall": "elm-tooling install",
-    "start": "elm reactor"
+    "start": "elm reactor",
+    "test": "elm-test"
   },
   "devDependencies": {
     "elm": "^0.19.1-5",

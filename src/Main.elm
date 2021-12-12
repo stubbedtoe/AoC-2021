@@ -4,6 +4,7 @@ import Browser
 import Day1
 import Day2
 import Day3
+import Day4
 import Html exposing (Html, button, div, p, text)
 import Html.Events exposing (onClick)
 import Types exposing (Solution)
@@ -35,6 +36,7 @@ daysCompleted =
     [ Day 1
     , Day 2
     , Day 3
+    , Day 4
     ]
 
 
@@ -64,6 +66,9 @@ update msg _ =
 
                 3 ->
                     Just Day3.solution
+
+                4 ->
+                    Just Day4.solution
 
                 _ ->
                     Nothing
