@@ -1,14 +1,13 @@
-module Day1 exposing (solution)
+module Solutions.Day1 exposing (solution)
 
-import Day1input exposing (input)
-import Types exposing (Solution)
+import Types exposing (GetSolution)
 import Utils
 
 
-solution : Solution
-solution =
-    { part1 = Just part1
-    , part2 = Just part2
+solution : GetSolution
+solution input =
+    { part1 = Just (part1 input)
+    , part2 = Just (part2 input)
     }
 
 
@@ -36,8 +35,8 @@ sumOfThree list current =
             current
 
 
-part1 : String
-part1 =
+part1 : String -> String
+part1 input =
     let
         nums =
             Utils.intsFromLines input
@@ -48,8 +47,8 @@ part1 =
     String.fromInt increasedFromPrevious
 
 
-part2 : String
-part2 =
+part2 : String -> String
+part2 input =
     let
         nums =
             Utils.intsFromLines input

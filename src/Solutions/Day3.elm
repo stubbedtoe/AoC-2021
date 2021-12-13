@@ -1,8 +1,7 @@
-module Day3 exposing (solution)
+module Solutions.Day3 exposing (solution)
 
-import Array exposing (Array)
-import Day3input
-import Types exposing (Solution)
+import Array
+import Types exposing (GetSolution)
 
 
 type alias GammaEplison =
@@ -71,11 +70,11 @@ listFromArray allChars jump skip =
         |> List.map (\( _, c ) -> c)
 
 
-part1 : String
-part1 =
+part1 : String -> String
+part1 input =
     let
         asStringList =
-            String.lines Day3input.input
+            String.lines input
 
         stringLength =
             case asStringList of
@@ -114,7 +113,7 @@ getRating which binaries index =
                 |> binaryToInt
                 |> Just
 
-        binary :: rest ->
+        binary :: _ ->
             let
                 stringLength =
                     List.length binary
@@ -157,11 +156,11 @@ getRating which binaries index =
                     getRating which newBinaries (index + 1)
 
 
-part2 : Maybe String
-part2 =
+part2 : String -> Maybe String
+part2 input =
     let
         rows =
-            String.lines Day3input.input
+            String.lines input
                 |> List.map String.toList
 
         o2GeneratorRating =
@@ -178,8 +177,8 @@ part2 =
             Nothing
 
 
-solution : Solution
-solution =
-    { part1 = Just part1
-    , part2 = part2
+solution : GetSolution
+solution input =
+    { part1 = Just (part1 input)
+    , part2 = part2 input
     }

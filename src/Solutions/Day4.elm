@@ -1,8 +1,7 @@
-module Day4 exposing (parseInput, solution)
+module Solutions.Day4 exposing (parseInput, solution)
 
 import Array
-import Day4input
-import Types exposing (Solution)
+import Types exposing (GetSolution)
 import Utils
 
 
@@ -29,11 +28,6 @@ type alias Bingo =
     { cards : List WinningCard
     , otherCards : List BingoCard
     }
-
-
-type RoundResult
-    = Success Bingo
-    | Failure (List BingoCard)
 
 
 type alias ParsedInput =
@@ -189,11 +183,11 @@ parseInput input =
             { numbers = [], cards = [] }
 
 
-solution : Solution
-solution =
+solution : GetSolution
+solution input =
     let
         bingo =
-            parseInput Day4input.input
+            parseInput input
                 |> playBingo
 
         part1Card =

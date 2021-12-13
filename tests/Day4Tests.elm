@@ -1,8 +1,7 @@
 module Day4Tests exposing (..)
 
-import Array
-import Day4 exposing (parseInput)
 import Expect
+import Solutions.Day4 exposing (parseInput)
 import Test exposing (..)
 
 
@@ -30,68 +29,66 @@ suite =
                             { numbers = [ 7, 4, 9 ]
                             , cards =
                                 [ { squares =
-                                        Array.fromList
-                                            [ { value = 22
-                                              , checked = False
-                                              }
-                                            , { value = 13
-                                              , checked = False
-                                              }
-                                            , { value = 17
-                                              , checked = False
-                                              }
-                                            , { value = 8
-                                              , checked = False
-                                              }
-                                            , { value = 2
-                                              , checked = False
-                                              }
-                                            , { value = 23
-                                              , checked = False
-                                              }
-                                            , { value = 21
-                                              , checked = False
-                                              }
-                                            , { value = 9
-                                              , checked = False
-                                              }
-                                            , { value = 14
-                                              , checked = False
-                                              }
-                                            ]
+                                        [ { value = 22
+                                          , checked = False
+                                          }
+                                        , { value = 13
+                                          , checked = False
+                                          }
+                                        , { value = 17
+                                          , checked = False
+                                          }
+                                        , { value = 8
+                                          , checked = False
+                                          }
+                                        , { value = 2
+                                          , checked = False
+                                          }
+                                        , { value = 23
+                                          , checked = False
+                                          }
+                                        , { value = 21
+                                          , checked = False
+                                          }
+                                        , { value = 9
+                                          , checked = False
+                                          }
+                                        , { value = 14
+                                          , checked = False
+                                          }
+                                        ]
                                   , width = 3
                                   , height = 3
                                   }
                                 , { squares =
-                                        Array.fromList
-                                            [ { value = 3
-                                              , checked = False
-                                              }
-                                            , { value = 15
-                                              , checked = False
-                                              }
-                                            , { value = 0
-                                              , checked = False
-                                              }
-                                            , { value = 9
-                                              , checked = False
-                                              }
-                                            , { value = 18
-                                              , checked = False
-                                              }
-                                            , { value = 13
-                                              , checked = False
-                                              }
-                                            , { value = 19
-                                              , checked = False
-                                              }
-                                            , { value = 8
-                                              , checked = False
-                                              }
-                                            , { value = 7
-                                              , checked = False
-                                              }
-                                            ]
+                                        [ { value = 3
+                                          , checked = False
+                                          }
+                                        , { value = 15
+                                          , checked = False
+                                          }
+                                        , { value = 0
+                                          , checked = False
+                                          }
+                                        , { value = 9
+                                          , checked = False
+                                          }
+                                        , { value = 18
+                                          , checked = False
+                                          }
+                                        , { value = 13
+                                          , checked = False
+                                          }
+                                        , { value = 19
+                                          , checked = False
+                                          }
+                                        , { value = 8
+                                          , checked = False
+                                          }
+                                        , { value = 7
+                                          , checked = False
+                                          }
+                                        ]
                                   , width = 3
                                   , height = 3
                                   }

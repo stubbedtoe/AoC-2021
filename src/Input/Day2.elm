@@ -1,4 +1,14 @@
-module Day2input exposing (input)
+module Input.Day2 exposing (input, test)
+
+
+test : String
+test =
+    """forward 5
+down 5
+forward 8
+up 3
+down 8
+forward 2"""
 
 
 input : String

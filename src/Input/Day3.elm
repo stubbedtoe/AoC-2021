@@ -1,4 +1,4 @@
-module Day3input exposing (input, test)
+module Input.Day3 exposing (input, test)
 
 
 test : String

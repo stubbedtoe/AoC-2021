@@ -1,13 +1,13 @@
 module Main exposing (..)
 
 import Browser
-import Day1
-import Day2
-import Day3
-import Day4
-import Html exposing (Html, button, div, p, text)
-import Html.Events exposing (onClick)
-import Types exposing (Solution)
+import Html exposing (Html, br, button, div, option, p, select, text)
+import Html.Attributes exposing (style, value)
+import Html.Events exposing (onClick, onInput)
+import Input
+import Solutions
+import Solutions.Day1 exposing (solution)
+import Types exposing (DaysComplete(..), InputType(..), Solution)
 
 
 
@@ -28,21 +28,29 @@ type Day
 
 
 type alias Model =
-    Maybe Solution
+    { solution : Maybe Solution
+    , inputType : InputType
+    , day : Maybe DaysComplete
+    }
 
 
-daysCompleted : List Day
+daysCompleted : List ( String, DaysComplete )
 daysCompleted =
-    [ Day 1
-    , Day 2
-    , Day 3
-    , Day 4
+    [ ( "1", Day1 )
+    , ( "2", Day2 )
+    , ( "3", Day3 )
+    , ( "4", Day4 )
+    , ( "5", Day5 )
+    , ( "6", Day6 )
     ]
 
 
 init : Model
 init =
-    Nothing
+    { solution = Nothing
+    , day = Nothing
+    , inputType = Test
+    }
 
 
 
@@ -50,28 +58,35 @@ init =
 
 
 type Msg
-    = Select Day
+    = Select DaysComplete
+    | UpdateInput String
+    | Solve
 
 
 update : Msg -> Model -> Model
-update msg _ =
+update msg model =
     case msg of
-        Select (Day num) ->
-            case num of
-                1 ->
-                    Just Day1.solution
+        Solve ->
+            case model.day of
+                Just day ->
+                    { model | solution = Just (Solutions.getSolution day (Input.getInput day model.inputType)) }
 
-                2 ->
-                    Just Day2.solution
+                Nothing ->
+                    { model | solution = Nothing }
 
-                3 ->
-                    Just Day3.solution
+        Select day ->
+            update Solve { model | day = Just day }
 
-                4 ->
-                    Just Day4.solution
+        UpdateInput inputType ->
+            case inputType of
+                "test" ->
+                    update Solve { model | inputType = Test }
+
+                "input" ->
+                    update Solve { model | inputType = Input }
 
                 _ ->
-                    Nothing
+                    model
 
 
 
@@ -96,17 +111,41 @@ printSolution solution =
                 ]
 
 
-makeButton : Day -> Html Msg
-makeButton day =
-    case day of
-        Day num ->
-            button [ onClick (Select day) ] [ text (String.fromInt num) ]
+makeButton : Maybe DaysComplete -> ( String, DaysComplete ) -> Html Msg
+makeButton daySelected ( label, day ) =
+    button
+        [ onClick (Select day)
+        , style "background-color"
+            (case daySelected of
+                Just d ->
+                    if d == day then
+                        "yellow"
+
+                    else
+                        "white"
+
+                Nothing ->
+                    "white"
+            )
+        ]
+        [ text label ]
+
+
+selectInput : Html Msg
+selectInput =
+    select [ onInput UpdateInput, style "margin-top" "2rem" ]
+        [ option [ value "test" ] [ text "test" ]
+        , option [ value "input" ] [ text "input" ]
+        ]
 
 
 view : Model -> Html Msg
 view model =
     div []
         (List.append
-            (List.map makeButton daysCompleted)
-            [ printSolution model ]
+            (List.map (makeButton model.day) daysCompleted)
+            [ br [] []
+            , selectInput
+            , printSolution model.solution
+            ]
         )

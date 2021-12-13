@@ -1,7 +1,6 @@
-module Day2 exposing (solution)
+module Solutions.Day2 exposing (solution)
 
-import Day2input
-import Types exposing (Solution)
+import Types exposing (GetSolution)
 
 
 type Command
@@ -99,28 +98,28 @@ parseLine line =
             Nothing
 
 
-parseInput : List Command
-parseInput =
-    String.lines Day2input.input
+parseInput : String -> List Command
+parseInput input =
+    String.lines input
         |> List.filterMap parseLine
 
 
-part1 : String
-part1 =
-    parseInput
+part1 : String -> String
+part1 input =
+    parseInput input
         |> calculatePosition { depth = 0, horizontal = 0 }
         |> positionToPart1
 
 
-part2 : String
-part2 =
-    parseInput
+part2 : String -> String
+part2 input =
+    parseInput input
         |> calculatePositionWithAim { depth = 0, horizontal = 0, aim = 0 }
         |> positionToPart2
 
 
-solution : Solution
-solution =
-    { part1 = Just part1
-    , part2 = Just part2
+solution : GetSolution
+solution input =
+    { part1 = Just (part1 input)
+    , part2 = Just (part2 input)
     }
