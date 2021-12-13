@@ -42,6 +42,7 @@ daysCompleted =
     , ( "4", Day4 )
     , ( "5", Day5 )
     , ( "6", Day6 )
+    , ( "7", Day7 )
     ]
 
 

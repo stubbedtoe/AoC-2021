@@ -18,8 +18,14 @@ type DaysComplete
     | Day4
     | Day5
     | Day6
+    | Day7
 
 
 type InputType
     = Test
     | Input
+
+
+type Part
+    = Part1
+    | Part2
