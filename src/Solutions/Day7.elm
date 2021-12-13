@@ -1,6 +1,5 @@
 module Solutions.Day7 exposing (solution)
 
-import Dict exposing (diff)
 import Input.Day1 exposing (input)
 import Types exposing (GetSolution, Part(..))
 import Utils
