@@ -8,6 +8,7 @@ import Input.Day5
 import Input.Day6
 import Input.Day7
 import Input.Day8
+import Input.Day9
 import Types exposing (DaysComplete(..), InputType(..))
 
 
@@ -77,3 +78,11 @@ getInput day input =
 
                 Input ->
                     Input.Day8.input
+
+        Day9 ->
+            case input of
+                Test ->
+                    Input.Day9.test
+
+                Input ->
+                    Input.Day9.input

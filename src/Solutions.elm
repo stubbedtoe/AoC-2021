@@ -8,6 +8,7 @@ import Solutions.Day5
 import Solutions.Day6
 import Solutions.Day7
 import Solutions.Day8
+import Solutions.Day9
 import Types exposing (DaysComplete(..), GetSolution)
 
 
@@ -37,3 +38,6 @@ getSolution day =
 
         Day8 ->
             Solutions.Day8.solution
+
+        Day9 ->
+            Solutions.Day9.solution
