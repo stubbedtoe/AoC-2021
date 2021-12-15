@@ -21,6 +21,8 @@ type DaysComplete
     | Day7
     | Day8
     | Day9
+    | Day10
+    | Day11
 
 
 type InputType

@@ -1,6 +1,8 @@
 module Input exposing (..)
 
 import Input.Day1
+import Input.Day10
+import Input.Day11
 import Input.Day2
 import Input.Day3
 import Input.Day4
@@ -86,3 +88,19 @@ getInput day input =
 
                 Input ->
                     Input.Day9.input
+
+        Day10 ->
+            case input of
+                Test ->
+                    Input.Day10.test
+
+                Input ->
+                    Input.Day10.input
+
+        Day11 ->
+            case input of
+                Test ->
+                    Input.Day11.test
+
+                Input ->
+                    Input.Day11.input
