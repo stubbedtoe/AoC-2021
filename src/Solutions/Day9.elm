@@ -1,6 +1,8 @@
 module Solutions.Day9 exposing (solution)
 
 import Array exposing (Array)
+import Dict exposing (Dict)
+import Test.Html.Event exposing (check)
 import Types exposing (GetSolution)
 
 
@@ -12,7 +14,9 @@ type alias Depths =
 
 type alias AdjacencyCheck =
     { value : Int
+    , index : Int
     , neighbours : List Int
+    , basinIndex : Maybe Int
     }
 
 
@@ -41,44 +45,147 @@ createAdjacencies { values, width } =
     Array.indexedMap
         (\i value ->
             let
-                onLeftEdge =
-                    modBy width i == 0
-
-                onRightEdge =
-                    modBy width (i + 1) == 0
-
                 neighbourIndices =
-                    if onLeftEdge then
-                        -- left edge - ignore left neighbour
-                        [ i + 1, i - width, i + width ]
-
-                    else if onRightEdge then
-                        -- right edge - ignore right neighbour
-                        [ i - 1, i - width, i + width ]
-
-                    else
-                        [ i - 1, i + 1, i - width, i + width ]
+                    getNeighbourIndices i width
             in
             { value = value
             , neighbours = List.filterMap (\n -> Array.get n values) neighbourIndices
+            , basinIndex = Nothing
+            , index = i
             }
         )
         values
 
 
-findLowPoints : Array AdjacencyCheck -> Array Int
+createAdjacenciesPart2 : Depths -> Array AdjacencyCheck
+createAdjacenciesPart2 { values, width } =
+    Array.indexedMap
+        (\i value ->
+            { value = value
+            , neighbours = getNeighbourIndices i width
+            , basinIndex = Nothing
+            , index = i
+            }
+        )
+        values
+
+
+isLowPoint : AdjacencyCheck -> Bool
+isLowPoint { value, neighbours } =
+    List.all (\n -> n > value) neighbours
+
+
+getNeighbourIndices : Int -> Int -> List Int
+getNeighbourIndices index width =
+    let
+        onLeftEdge =
+            modBy width index == 0
+
+        onRightEdge =
+            modBy width (index + 1) == 0
+    in
+    if onLeftEdge then
+        -- left edge - ignore left neighbour
+        [ index + 1, index - width, index + width ]
+
+    else if onRightEdge then
+        -- right edge - ignore right neighbour
+        [ index - 1, index - width, index + width ]
+
+    else
+        [ index - 1, index + 1, index - width, index + width ]
+
+
+updateWithBasinIndex : Int -> AdjacencyCheck -> AdjacencyCheck
+updateWithBasinIndex index check =
+    { check | basinIndex = Just index }
+
+
+findLowPoints : Array AdjacencyCheck -> Array AdjacencyCheck
 findLowPoints checks =
-    Array.filter
-        (\{ value, neighbours } ->
-            List.all (\n -> n > value) neighbours
+    Array.filter isLowPoint checks
+
+
+floodSelfAndNeighbours : Int -> Int -> Array AdjacencyCheck -> Array AdjacencyCheck
+floodSelfAndNeighbours basinIndex index checks =
+    case Array.get index checks of
+        Just check ->
+            -- let
+            --     _ =
+            --         Debug.log "in flood" (String.fromInt check.value)
+            -- in
+            if check.value /= 9 && check.basinIndex == Nothing then
+                -- let
+                --     _ =
+                --         Debug.log "update and recurse" (String.fromInt check.value)
+                -- in
+                List.foldl
+                    (floodSelfAndNeighbours basinIndex)
+                    (Array.set index (updateWithBasinIndex basinIndex check) checks)
+                    check.neighbours
+
+            else
+                -- let
+                --     _ =
+                --         Debug.log "not updating" (String.fromInt check.value)
+                -- in
+                checks
+
+        Nothing ->
+            checks
+
+
+floodBasins : Array AdjacencyCheck -> Array AdjacencyCheck
+floodBasins checks =
+    Array.foldl
+        (\lowpoint acc ->
+            floodSelfAndNeighbours lowpoint.index lowpoint.index acc
         )
         checks
-        |> Array.map .value
+        (findLowPoints checks)
 
 
-riskLevelSum : Array Int -> String
+gatherBasins : Array AdjacencyCheck -> Dict Int Int
+gatherBasins checks =
+    Array.foldl
+        (\check acc ->
+            case check.basinIndex of
+                Just i ->
+                    Dict.update i
+                        (\maybeNum ->
+                            case maybeNum of
+                                Just num ->
+                                    Just (num + 1)
+
+                                Nothing ->
+                                    Just 1
+                        )
+                        acc
+
+                Nothing ->
+                    acc
+        )
+        Dict.empty
+        checks
+
+
+getTopThreeBasins : Dict Int Int -> String
+getTopThreeBasins basins =
+    -- let
+    --     _ =
+    --         Debug.log "basins" basins
+    -- in
+    List.sort (Dict.values basins)
+        |> List.reverse
+        |> List.take 3
+        |> List.product
+        |> String.fromInt
+
+
+riskLevelSum : Array AdjacencyCheck -> String
 riskLevelSum lowPoints =
     Array.toList lowPoints
+        |> List.map .value
         |> List.map ((+) 1)
         |> List.sum
         |> String.fromInt
@@ -92,8 +199,17 @@ part1 input =
         |> riskLevelSum
 
 
+part2 : String -> String
+part2 input =
+    parseInput input
+        |> createAdjacenciesPart2
+        |> floodBasins
+        |> gatherBasins
+        |> getTopThreeBasins
+
+
 solution : GetSolution
 solution input =
     { part1 = Just (part1 input)
-    , part2 = Nothing
+    , part2 = Just (part2 input)
     }
