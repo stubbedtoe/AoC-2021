@@ -4,6 +4,7 @@ import Solutions.Day1
 import Solutions.Day10
 import Solutions.Day11
 import Solutions.Day12
+import Solutions.Day13
 import Solutions.Day2
 import Solutions.Day3
 import Solutions.Day4
@@ -53,3 +54,6 @@ getSolution day =
 
         Day12 ->
             Solutions.Day12.solution
+
+        Day13 ->
+            Solutions.Day13.solution

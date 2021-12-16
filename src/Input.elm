@@ -4,6 +4,7 @@ import Input.Day1
 import Input.Day10
 import Input.Day11
 import Input.Day12
+import Input.Day13
 import Input.Day2
 import Input.Day3
 import Input.Day4
@@ -113,3 +114,11 @@ getInput day input =
 
                 Input ->
                     Input.Day12.input
+
+        Day13 ->
+            case input of
+                Test ->
+                    Input.Day13.test
+
+                Input ->
+                    Input.Day13.input
