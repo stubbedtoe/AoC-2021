@@ -3,6 +3,7 @@ module Solutions exposing (..)
 import Solutions.Day1
 import Solutions.Day10
 import Solutions.Day11
+import Solutions.Day12
 import Solutions.Day2
 import Solutions.Day3
 import Solutions.Day4
@@ -49,3 +50,6 @@ getSolution day =
 
         Day11 ->
             Solutions.Day11.solution
+
+        Day12 ->
+            Solutions.Day12.solution
